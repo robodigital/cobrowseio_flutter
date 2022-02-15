@@ -14,8 +14,9 @@
   NSDictionary *arguments = call.arguments;
   if ([@"start" isEqualToString:call.method]) {
     [self start:call result:result args:arguments];
-  }
-  else {
+  } else if ([@"getCode" isEqualToString:call.method]) {
+    [self getCode:call result:result args:arguments];
+  } else {
     result(FlutterMethodNotImplemented);
   }
 }
@@ -30,6 +31,16 @@
   }else{
     result([NSString stringWithFormat:@"[ start ERROR ] :: licenseKey is required"]);
   }
+}
+
+- (void)getCode:(FlutterMethodCall*)call result:(FlutterResult)result args:(NSDictionary*)args {
+  [CobrowseIO.instance createSession:^(NSError * err, CBIOSession * session) {
+    if (!err && session.code) {
+      result(@(session.code));
+    } else {
+      result([FlutterError errorWithCode:@"Error" message:@"Failed to create code" details:nil]);
+    }
+  }];
 }
 
 @end

@@ -100,6 +100,9 @@ public class CobrowseIOFlutterPlugin implements MethodCallHandler, FlutterPlugin
         case "start":
           handlerStart(call, result);
           break;
+        case "getCode":
+          handlerGetCode(call, result);
+          break;
         default:
           result.notImplemented();
           break;
@@ -117,6 +120,20 @@ public class CobrowseIOFlutterPlugin implements MethodCallHandler, FlutterPlugin
       CobrowseIO.instance().customData(customData);
       CobrowseIO.instance().start(this.activity);
       result.success("Started!");
+    } catch (Exception ex) {
+      result.error("Error", ex.getMessage(), ex.getStackTrace());
+    }
+  }
+
+  public void handlerGetCode(MethodCall call, Result result) throws Exception {
+    try {
+      CobrowseIO.instance().createSession((err, session) -> {
+          if (err == null && session != null) {
+            result.success(session.code());
+          } else {
+            result.error("Error", "Failed to create code", null);
+          }
+      });
     } catch (Exception ex) {
       result.error("Error", ex.getMessage(), ex.getStackTrace());
     }

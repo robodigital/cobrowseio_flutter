@@ -6,7 +6,6 @@ A Flutter plugin to make use of cobrowse.io. View your app running remotely on c
 
   - Android
   - iOS
-  
 
 ## Getting Started
 
@@ -21,6 +20,13 @@ To use this plugin, add cobrowseio_flutter as a dependency in your pubspec.yaml 
     String result = await CobrowseIO.start("YOUR_LICENSE_KEY", {
         'custom_data_field': 'Test'
     });
+```
+
+### get a 6-digit code
+After doing the init above, call:
+
+```dart
+    String code = await CobrowseIO.getCode();
 ```
 
 ### Plugins
