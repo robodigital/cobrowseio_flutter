@@ -18,9 +18,14 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState(){
     super.initState();
-    CobrowseIO.start("YOUR_LICENSE_KEY", {
+
+    // Init Cobrowse, pass licensekey and eventually custom data.
+    await CobrowseIO.start("YOUR_LICENSE_KEY", {
         'username': 'Test'
     });
+
+    // Retrieve a 6-digit code.
+    print(await CobrowseIO.getCode());
   }
 
   @override

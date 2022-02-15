@@ -22,7 +22,7 @@ To use this plugin, add cobrowseio_flutter as a dependency in your pubspec.yaml 
     });
 ```
 
-### get a 6-digit code
+### Get a 6-digit code
 After doing the init above, call:
 
 ```dart
