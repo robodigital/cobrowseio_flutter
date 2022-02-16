@@ -24,21 +24,21 @@
 - (void)start:(FlutterMethodCall*)call result:(FlutterResult)result args:(NSDictionary*)args {
   NSString *licenseKey = [args objectForKey:@"licenseKey"];
   NSDictionary *customData = [args objectForKey:@"customData"];
-  if(licenseKey != nil ){
+  if (licenseKey != nil ) {
     CobrowseIO.instance.license = licenseKey;
     CobrowseIO.instance.customData = customData;
     [CobrowseIO.instance start];
-  }else{
-    result([NSString stringWithFormat:@"[ start ERROR ] :: licenseKey is required"]);
+  } else {
+    result([FlutterError errorWithCode:@"Error" message:@"Failed to start, licenseKey is required." details:nil]);
   }
 }
 
 - (void)getCode:(FlutterMethodCall*)call result:(FlutterResult)result args:(NSDictionary*)args {
   [CobrowseIO.instance createSession:^(NSError * err, CBIOSession * session) {
     if (!err && session.code) {
-      result(@(session.code));
+      result(session.code);
     } else {
-      result([FlutterError errorWithCode:@"Error" message:@"Failed to create code" details:nil]);
+      result([FlutterError errorWithCode:@"Error" message:@"Failed to create code." details:nil]);
     }
   }];
 }
