@@ -1,3 +1,7 @@
+## 1.0.2
+
+* Fixed iOS build issues.
+
 ## 1.0.1
 
 * Added `getCode` function to retrieve 6-digit code.
