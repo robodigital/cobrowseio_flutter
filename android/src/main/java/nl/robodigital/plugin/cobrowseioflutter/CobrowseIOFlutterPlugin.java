@@ -1,6 +1,9 @@
 package nl.robodigital.plugin.cobrowseioflutter;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.content.Context;
+import android.content.Intent;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -14,6 +17,7 @@ import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 import io.cobrowse.CobrowseIO;
+import io.cobrowse.CobrowseAccessibilityService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,14 +28,17 @@ import java.util.HashMap;
 /**
  * CobrowseIOFlutterPlugin
  */
-public class CobrowseIOFlutterPlugin implements MethodCallHandler, FlutterPlugin, ActivityAware {
+public class CobrowseIOFlutterPlugin 
+  implements MethodCallHandler, FlutterPlugin, ActivityAware {
 
   private static final String CHANNEL = "cobrowseio_plugin";
 
   private static CobrowseIOFlutterPlugin instance;
   private static MethodChannel channel;
 
+  private FlutterPluginBinding pluginBinding;
   private Activity activity;
+
   private final Object initializationLock = new Object();
 
   public static void registerWith(Registrar registrar) {
@@ -47,6 +54,7 @@ public class CobrowseIOFlutterPlugin implements MethodCallHandler, FlutterPlugin
 
   @Override
   public void onAttachedToEngine(FlutterPluginBinding binding) {
+      this.pluginBinding = binding;
       onAttachedToEngine(binding.getBinaryMessenger());
   }
 
@@ -103,6 +111,15 @@ public class CobrowseIOFlutterPlugin implements MethodCallHandler, FlutterPlugin
         case "getCode":
           handlerGetCode(call, result);
           break;
+        case "accessibilityServiceIsRunning":
+          handlerAccessibilityServiceIsRunning(call, result);
+          break;
+        case "accessibilityServiceOpenSettings":
+          handlerAccessibilityServiceOpenSettings(call, result);
+          break;
+        case "accessibilityServiceShowSetup":
+          handlerAccessibilityServiceShowSetup(call, result);
+          break;
         default:
           result.notImplemented();
           break;
@@ -134,6 +151,35 @@ public class CobrowseIOFlutterPlugin implements MethodCallHandler, FlutterPlugin
             result.error("Error", "Failed to create code", null);
           }
       });
+    } catch (Exception ex) {
+      result.error("Error", ex.getMessage(), ex.getStackTrace());
+    }
+  }
+
+  public void handlerAccessibilityServiceIsRunning(MethodCall call, Result result) throws Exception {
+    try {
+      boolean isRunning = CobrowseAccessibilityService.isRunning(this.activity);
+      result.success(isRunning);
+    } catch (Exception ex) {
+      result.error("Error", ex.getMessage(), ex.getStackTrace());
+    }
+  }
+
+  public void handlerAccessibilityServiceOpenSettings(MethodCall call, Result result) throws Exception {
+    try {
+      Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      this.pluginBinding.getApplicationContext().startActivity(intent);
+      result.success("Setting opened");
+    } catch (Exception ex) {
+      result.error("Error", ex.getMessage(), ex.getStackTrace());
+    }
+  }
+
+  public void handlerAccessibilityServiceShowSetup(MethodCall call, Result result) throws Exception {
+    try {
+      CobrowseAccessibilityService.showSetup(this.activity);
+      result.success("Setup shown");
     } catch (Exception ex) {
       result.error("Error", ex.getMessage(), ex.getStackTrace());
     }

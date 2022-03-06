@@ -20,4 +20,16 @@ class CobrowseIO {
   static Future<String> getCode() async {
     return await _channel.invokeMethod('getCode');
   }
+
+  static void accessibilityServiceShowSetup() async {
+    return await _channel.invokeMethod('accessibilityServiceShowSetup');
+  }
+
+  static void accessibilityServiceOpenSettings() async {
+    return await _channel.invokeMethod('accessibilityServiceOpenSettings');
+  }
+
+  static Future<bool> accessibilityServiceIsRunning() async {
+    return await _channel.invokeMethod('accessibilityServiceIsRunning');
+  }
 }

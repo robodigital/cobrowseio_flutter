@@ -1,3 +1,7 @@
+## 1.0.3
+
+* Added support for full device remote control on Android.
+
 ## 1.0.2
 
 * Fixed iOS build issues.

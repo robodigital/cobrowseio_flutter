@@ -29,6 +29,24 @@ After doing the init above, call:
     String code = await CobrowseIO.getCode();
 ```
 
+### Add full device remote control (Android only)
+If you want to have access to the full device on android, call:
+
+```dart
+    if (Platform.isAndroid) {
+
+      // Or: Check if we have access to full remote control.
+      if (!await CobrowseIO.accessibilityServiceIsRunning()) {
+
+        // If not, open the accesibility service settings to let the user give access.
+        CobrowseIO.accessibilityServiceOpenSettings();
+      }
+
+      // Or: Show the default setup screen.
+      CobrowseIO.accessibilityServiceShowSetup();
+    }
+```
+
 ### Plugins
 
 | Plugin | Links |
