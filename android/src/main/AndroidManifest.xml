@@ -4,9 +4,4 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <application>
-        <service
-            android:name="io.cobrowse.CobrowseAccessibilityService"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" />
-    </application>
 </manifest>

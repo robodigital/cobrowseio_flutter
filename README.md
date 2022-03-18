@@ -30,7 +30,17 @@ After doing the init above, call:
 ```
 
 ### Add full device remote control (Android only)
-If you want to have access to the full device on android, call:
+If you want to have access to the full device on android, add this to your `AndroidManifest.xml` file:
+
+```xml
+    <application>
+        <service
+            android:name="io.cobrowse.CobrowseAccessibilityService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" />
+    </application>
+```
+
+In your code, call:
 
 ```dart
     if (Platform.isAndroid) {
