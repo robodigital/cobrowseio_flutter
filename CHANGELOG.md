@@ -1,3 +1,7 @@
+## 1.0.5
+
+* Several bugfixes for Android.
+
 ## 1.0.4
 
 * Removed Removed Accessibility Service permission for Android. You can add this to your own AndroidManifest.xml file, see readme.

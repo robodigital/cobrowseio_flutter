@@ -5,6 +5,9 @@ import android.os.Handler;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -13,8 +16,6 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 import io.cobrowse.CobrowseIO;
 import io.cobrowse.CobrowseAccessibilityService;
@@ -23,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.HashMap;
-
 
 /**
  * CobrowseIOFlutterPlugin
@@ -41,7 +41,8 @@ public class CobrowseIOFlutterPlugin
 
   private final Object initializationLock = new Object();
 
-  public static void registerWith(Registrar registrar) {
+  @SuppressWarnings("deprecation")
+  public static void registerWith(io.flutter.plugin.common.PluginRegistry.Registrar registrar) {
     if (instance == null) {
       instance = new CobrowseIOFlutterPlugin();
     }
@@ -53,12 +54,12 @@ public class CobrowseIOFlutterPlugin
   }
 
   @Override
-  public void onAttachedToEngine(FlutterPluginBinding binding) {
+  public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
       this.pluginBinding = binding;
       onAttachedToEngine(binding.getBinaryMessenger());
   }
 
-  private void onAttachedToEngine(BinaryMessenger messenger) {
+  private void onAttachedToEngine(@NonNull BinaryMessenger messenger) {
     synchronized (initializationLock) {
       if (channel != null) {
         return;
@@ -70,35 +71,44 @@ public class CobrowseIOFlutterPlugin
   }
 
   @Override
-  public void onDetachedFromEngine(FlutterPluginBinding binding) {
-    channel.setMethodCallHandler(null);
-    channel = null;
+  public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+    if (channel != null) {
+      channel.setMethodCallHandler(null);
+      channel = null;
+    }
   }
 
   @Override
-  public void onAttachedToActivity(ActivityPluginBinding binding) {
+  public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
     onAttachedToActivity(binding.getActivity());
   }
 
-  private void onAttachedToActivity(Activity activity) {
+  private void onAttachedToActivity(@NonNull Activity activity) {
     this.activity = activity;
   }
 
   @Override
   public void onDetachedFromActivityForConfigChanges() {
-    activity = null;
+    if (activity != null) {
+      activity = null;
+    }
   }
 
   @Override
-  public void onReattachedToActivityForConfigChanges(ActivityPluginBinding binding) {
+  public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
     onAttachedToActivity(binding);
   }
 
   @Override
   public void onDetachedFromActivity() {
-      channel.setMethodCallHandler(null);
-      channel = null;
-      activity = null;
+      if (channel != null) {
+        channel.setMethodCallHandler(null);
+        channel = null;
+      }
+
+      if (activity != null) {
+        activity = null;
+      }
   }
 
   @Override
