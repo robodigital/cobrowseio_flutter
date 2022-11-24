@@ -40,6 +40,8 @@ If you want to have access to the full device on android, add this to your `Andr
     </application>
 ```
 
+Please note: Only add this when you need this, because this might reject your app from the Play Store. Please read more here: https://docs.cobrowse.io/sdk-features/full-device-capabilities/full-device-remote-control#configuring-full-device-remote-control
+
 In your code, call:
 
 ```dart
