@@ -1,3 +1,7 @@
+## 1.0.6
+
+* Added Gradle 8 support.
+
 ## 1.0.5
 
 * Several bugfixes for Android.
